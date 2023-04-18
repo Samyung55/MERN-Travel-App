@@ -19,6 +19,7 @@ authRouter.post("/register", async (req, res) => {
 
         const user = await User.create({ ...req.body, password: hash });
         await user.save();
+        console.log('User created successfully')
 
         const { password, ...others } = user._doc
         console.log(others)
