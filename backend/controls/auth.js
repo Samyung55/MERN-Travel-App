@@ -26,7 +26,7 @@ authRouter.post("/register", async (req, res) => {
         const token = createToken(user);
         console.log(token)
 
-        return res.status(201).json({ others, token });
+        return res.status(201).json({ msg: "User created successful", others, token });
     }
     catch (error) {
         return res.status(500).json(error);
@@ -55,7 +55,7 @@ authRouter.post("/login", async (req, res) => {
         const { password, ...others } = user._doc
         const token = createToken(user);
 
-        return res.status({ others, token });
+        return res.status(200).json({ msg: "Login successful", ...others, token });
     }
 
     catch (error) {
