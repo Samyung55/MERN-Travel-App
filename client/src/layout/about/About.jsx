@@ -17,6 +17,8 @@ const About = () => {
     const dispatch = useDispatch()
 
     const handleSearch = () => {
-        const startD
+        const startDateFormatted = new Date(startDate)
+        const endDateFormatted = new Date(endDate)
+        console.log(startDateFormatted, endDateFormatted)
     }
 }
