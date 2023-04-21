@@ -11,7 +11,7 @@ import { getDatesInRange, isUnavailable } from "../../utils/dateFunc"
 const TypeDetail = () => {
     const {startDate: startDateRedux, endDate: endDateRedux} = useSelector((state) => state.search)
     const [roomDetails, setRoomDetails] = useState("")
-    const [startDate, setStartDate] => useState(startDateRedux || "")
+    const [startDate, setStartDate] = useState(startDateRedux || "")
     const [endDate, setEndDate] = useState(endDateRedux || "")
     const [username, setUsername] = useState("")
     const [error, setError] = useState(false)
@@ -51,9 +51,96 @@ const TypeDetail = () => {
         const yourBookedDates = getDatesInRange(startDate, endDate)
         const isUnavailableDates = isUnavailable(roomDetails, yourBookedDates)
 
-        if (isUnavailableDates {
-            const lastAvailableDate = new Date(roomDetails.unavailableDates(roomDetails.unavailableDates.length - 1))   
-            
-        })
+        if (isUnavailableDates) {
+            const lastAvailableDate = new Date(roomDetails.unavailableDates[roomDetails.unavailableDates.length - 1])   
+            const lastAvailableDay = lastAvailableDate.getDate()
+            const lastAvailableMonth = lastAvailableDate.getMonth()
+
+            const formattedMonth = (lastAvailableMonth + 1) > 9 ? `${lastAvailableMonth + 1}` : `0${lastAvailableMonth + 1}`
+            const formattedDay = lastAvailableDay > 9 ? `${lastAvailableDay}` : `0${lastAvailableDay}`
+
+            const formattedDayAndMonth = `
+            ${formattedDay}
+            ${formattedMonth}`
+            setError(formattedDayAndMonth)
+            setTimeout(() => {
+            setError(false)
+            }, 3500)
+
+            return
+        }
+
+        try {
+            const res = await fetch(`http://localhost:5500/room/bookRoom/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                method: "PUT",
+                body: JSON.stringify({ username, email, unavailableDates: yourBookedDates })
+            })
+
+            setSuccess(true)
+            setTimeout(() => {
+                setSuccess(false)
+            }, 3500)
+
+            const updatedRoom = await res.json()
+            setRoomDetails(updatedRoom)
+        }
+
+        catch (error) {
+            console.error(error);
+        }
     }
+
+    return (
+        <div ref={containerRef} className={classes.container}>
+      <div className={classes.wrapper}>
+        <div className={classes.left}>
+          <div className={classes.imgWrapper}>
+            <img src={img} alt="" />
+          </div>
+        </div>
+        <div className={classes.right}>
+          <h2 className={classes.title}>{roomDetails.title}</h2>
+          <p className={classes.type}>Type: <span>{roomDetails.type}</span></p>
+          <div className={classes.review}>
+            Review: <AiFillStar className={classes.icon} /> {roomDetails.review} (12)
+          </div>
+          <p className={classes.desc}>
+            <span>Description: </span>
+            {roomDetails.desc}
+          </p>
+          <div className={classes.priceAndCountry}>
+            <span>Country: United States</span>
+            <span>
+              <span className={classes.price}>{roomDetails.price}$ </span>/ per person
+            </span>
+          </div>
+          <form className={classes.typeDetailForm} onSubmit={handleSubmit}>
+            <h3 className={classes.subtitle}>Enter information here</h3>
+            <input value={username} type="text" placeholder="Full name" onChange={(e) => setUsername(e.target.value)} />
+            <input value={email} type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <input value={startDate} type="date" onChange={(e) => setStartDate(e.target.value)} />
+              <input value={endDate} type="date" onChange={(e) => setEndDate(e.target.value)} />
+            </div>
+            <button type="submit" className={classes.bookNow}>Book now</button>
+          </form>
+          {error &&
+            <div className={classes.errorMessage}>
+              Your date is in the booked range!
+              Last booked day is {error}
+            </div>
+          }
+          {success &&
+            <div className={classes.successMessage}>
+              Success! You booked from {startDate} to {endDate}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    )
 }
