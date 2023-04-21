@@ -8,7 +8,6 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true)
@@ -17,7 +16,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout())
-    navigate('/login')
  }
 
   return (

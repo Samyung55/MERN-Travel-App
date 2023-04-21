@@ -10,8 +10,8 @@ import {
     REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import authSlice from "./authSlice";
-import searchSlice from "./searchSlice";
+import authSlice from "./auth";
+import searchSlice from "./search";
 
 const persistConfig = {
     key: "root",
@@ -27,7 +27,7 @@ const reducers = combineReducers({
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-    reducer: persistReducer,
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware({
         serializableCheck: {
