@@ -5,3 +5,22 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};

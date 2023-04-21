@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./about.module.css";
-import img1 from "../../assets/img1"
+import img1 from "../../assets/img2.jpg"
 import { GiPalmTree } from "react-icons/gi"
 import { FaUmbrellaBeach } from "react-icons/fa"
 import { BiHappy } from "react-icons/bi"

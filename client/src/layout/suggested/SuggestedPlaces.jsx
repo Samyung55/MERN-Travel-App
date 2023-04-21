@@ -2,9 +2,9 @@ import React, { useEffect, useState} from "react";
 import classes from "./suggested.module.css"
 import { AiFillStar } from "react-icons/ai"
 import { Link, useParams } from 'react-router-dom'
-import { suggestedPlacesData } from "../../data/data"
+import { suggestedPlacesData } from "../../util/data"
 import img from '../../assets/img3.jpg'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const SuggestedPlaces = () => {
     const [estates, setEstates] = useState([])

@@ -2,7 +2,7 @@ import React from "react"
 import classes from "./types.module.css"
 import {useSelector} from 'react-redux'
 import { Link } from "react-router-dom"
-import { typeData } from "../../data/data"
+import { typeData } from "../../util/data"
 import { useState } from "react"
 import { useEffect } from "react"
 import img from '../../assets/img2.jpg'

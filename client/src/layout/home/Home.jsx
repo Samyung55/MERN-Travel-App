@@ -1,7 +1,7 @@
 import React from 'react'
 import About from '../about/About'
 import Types from '../types/Types'
-import SuggestedPlaces from '../suggestedPlaces/SuggestedPlaces'
+import SuggestedPlaces from '../suggested/SuggestedPlaces'
 import classes from './home.module.css'
 
 const Home = () => {

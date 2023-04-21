@@ -6,7 +6,7 @@ import { useEffect } from "react"
 import { useRef } from "react"
 import { useParams } from "react-router-dom"
 import { useSelector } from 'react-redux'
-import { getDatesInRange, isUnavailable } from "../../utils/dateFunc"
+import { getDatesInRange, isUnavailable } from "../../util/date"
 
 const TypeDetail = () => {
     const {startDate: startDateRedux, endDate: endDateRedux} = useSelector((state) => state.search)
@@ -144,3 +144,5 @@ const TypeDetail = () => {
     </div>
     )
 }
+
+export default TypeDetail
