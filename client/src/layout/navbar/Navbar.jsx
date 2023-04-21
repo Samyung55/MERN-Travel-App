@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import classes from "./navbar.module.css"
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout } from "../../redux/authSlice"
+import { logout } from "../../hooks/auth"
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -25,7 +25,7 @@ const Navbar = () => {
       <div className={classes.wrapper}>
         <div className={classes.left}>
           <Link to='/'>
-            <h2 className={classes.title}>WebDevMania</h2>
+            <h2 className={classes.title}>Fredoly</h2>
           </Link>
         </div>
         <div className={classes.center}>
