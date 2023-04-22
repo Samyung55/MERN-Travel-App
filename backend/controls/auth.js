@@ -34,38 +34,29 @@ authRouter.post("/register", async (req, res) => {
 })
 
 
-authRouter.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).json({ msg: "Both email and password are required" });
-    }
-  
+authRouter.post("/login", async (req, res, next) => {
     try {
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ username: req.body.username })
+      if (!user) return next(createError(404, "User not found"))
   
-      if (!user) {
-        return res.status(401).json({ msg: "Invalid credentials" });
-      }
+      const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password)
+      if (!isPasswordCorrect) return next(createError(404, "Wrong Password or username"))
   
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT)
   
-      if (!passwordMatch) {
-        return res.status(401).json({ msg: "Invalid credentials" });
-      }
+      const { password, isAdmin, ...otherDetails } = user._doc
   
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-  
-      const { password: userPassword, ...userWithoutPassword } = user.toObject();
-  
-      res.status(200).json({ token, user: userWithoutPassword });
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json({ details: { ...otherDetails }, isAdmin })
     } catch (err) {
-      res.status(500).json({ msg: "Server error" });
+      next(err)
     }
-  });
-
+  }
+)
 const createToken = (user) => {
     const payload = {
         id: user._id.toString(),
