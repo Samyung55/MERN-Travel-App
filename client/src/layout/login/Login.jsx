@@ -13,26 +13,28 @@ const Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+   
+      const handleLogin = async (event) => {
+        event.preventDefault();
+        
+        const email = event.target.email.value;
+        const password = event.target.password.value;
       
-        try {
-          const res = await fetch('http://localhost:5500/auth/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-          });
+        const response = await fetch('http://localhost:5500/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
       
-          if (res.status === 401) {
-            throw new Error('Invalid credentials');
-          }
-      
+        if (response.ok) {
+          // login successful, redirect or do something else
           const data = await res.json();
           dispatch(login(data));
           navigate('/');
-        } catch (error) {
+        } else {
+          // login failed, show error message
           console.error(error);
           setError(true);
           setTimeout(() => {
@@ -40,6 +42,7 @@ const Login = () => {
           }, 1500);
         }
       };
+      
 
     return (
         <div className={classes.loginContainer}>
@@ -50,8 +53,8 @@ const Login = () => {
            <div className={classes.loginRightSide}>
              <h2 className={classes.title}>Login</h2>
              <form onSubmit={handleLogin} className={classes.loginForm}>
-               <input type="email" placeholder="Type email"/>
-               <input type="password" placeholder="Type password"/>
+             <input type="email" name="email" placeholder="Type email"/>
+                <input type="password" name="password" placeholder="Type password"/>
                <button className={classes.submitBtn}>Login</button>
                <p>Don't have an account? <Link to='/signup'>Sign up</Link></p>
              </form>
