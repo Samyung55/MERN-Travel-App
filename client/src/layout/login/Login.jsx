@@ -14,31 +14,32 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault()
-
+        e.preventDefault();
+      
         try {
-            const res = await fetch(`http://localhost:5000/auth/login`, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify({email, password})
-            })
-            if (res.status === 404) {
-                throw new Error("Wrong Credentials")
-            }
-
-            const data = await res.json()
-            dispatch(login(data))
-            navigate('/')
+          const res = await fetch('http://localhost:5500/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
+      
+          if (res.status === 401) {
+            throw new Error('Invalid credentials');
+          }
+      
+          const data = await res.json();
+          dispatch(login(data));
+          navigate('/');
+        } catch (error) {
+          console.error(error);
+          setError(true);
+          setTimeout(() => {
+            setError(false);
+          }, 1500);
         }
-        catch (error) {
-            setError(prev => true)
-            setTimeout(() => {
-                setError(prev => false)
-            }, 2500)
-        }
-    }
+      };
 
     return (
         <div className={classes.loginContainer}>

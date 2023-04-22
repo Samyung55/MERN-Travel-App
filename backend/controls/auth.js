@@ -33,35 +33,38 @@ authRouter.post("/register", async (req, res) => {
     }
 })
 
+
 authRouter.post("/login", async (req, res) => {
     const { email, password } = req.body;
-
-    if (email === "" || password === "") {
-        return res.status(500).json({ msg: "All field are required" });
+  
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Both email and password are required" });
     }
-
+  
     try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ msg: "Invalid credentials" });
-        }
-        
-        const compare = await bcrypt.compare(req.user.password, user.password);
-        
-        if (!compare) {
-            return res.status(404).json({ msg: "Incorrect password" });
-        }
-
-        const { password, ...others } = user._doc
-        const token = createToken(user);
-
-        return res.status(200).json({ msg: "Login successful", ...others, token });
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(401).json({ msg: "Invalid credentials" });
+      }
+  
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!passwordMatch) {
+        return res.status(401).json({ msg: "Invalid credentials" });
+      }
+  
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+  
+      const { password: userPassword, ...userWithoutPassword } = user.toObject();
+  
+      res.status(200).json({ token, user: userWithoutPassword });
+    } catch (err) {
+      res.status(500).json({ msg: "Server error" });
     }
-
-    catch (error) {
-        return res.status(500).json(error)
-    }
-})
+  });
 
 const createToken = (user) => {
     const payload = {
