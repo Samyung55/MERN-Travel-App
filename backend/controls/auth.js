@@ -35,36 +35,24 @@ authRouter.post("/register", async (req, res) => {
 
 
 authRouter.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).json({ msg: "Both email and password are required" });
-    }
-  
-    try {
-      const user = await User.findOne({ email });
-  
+  try {
+      const user = await User.findOne({ email: req.body.email });
       if (!user) {
-        return res.status(401).json({ msg: "Invalid credentials" });
+          return res.status(400).json("Wrong Credentials!");
       }
-  
-      const passwordMatch = await bcrypt.compare(password, user.password);
-  
-      if (!passwordMatch) {
-        return res.status(401).json({ msg: "Invalid credentials" });
+
+      const validated = await bcrypt.compare(req.body.password, user.password);
+      if (!validated) {
+          return res.status(400).json("Wrong credentials!");
       }
-  
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-  
-      const { password: userPassword, ...userWithoutPassword } = user.toObject();
-  
-      res.status(200).json({ token, user: userWithoutPassword });
-    } catch (err) {
-      res.status(500).json({ msg: "Server error" });
-    }
-  });
+
+      const { password, ...others } = user._doc;
+      return res.status(200).json(others);
+  } catch (err) {
+      return res.status(500).json({ error: err.message });
+  }
+});
+
 
 const createToken = (user) => {
     const payload = {

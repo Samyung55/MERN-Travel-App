@@ -32,7 +32,7 @@ const SuggestedPlaces = () => {
     return (
         <section id="suggested" className={classes.container}>
             <div className={classes.wrapper}>
-                <div className={titles}>
+                <div className={classes.titles}>
                     <h5 className={classes.subtitle}>Most visited places</h5>
                     <h2 className={classes.title}>
                         Favorite destinations of our clients
