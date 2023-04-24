@@ -21,6 +21,7 @@ const SuggestedPlaces = () => {
                 })
                 const estates = await res.json()
                 setEstates(estates)  
+                console.log("estates:", estates)
             }
             catch (error) {
                 console.error(error)
