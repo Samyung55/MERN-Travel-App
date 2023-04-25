@@ -40,18 +40,18 @@ const SuggestedPlaces = () => {
                     </h2>
                 </div>
                 <div className={classes.places}>
-                {estates && estates.map((estate) => (
-                        <Link to={`/typeDetails/${estate._id}`} className={classes.places} key={estate._id}>
+                    {estates.map((suggestedPlace) => (
+                        <Link to={`/typeDetails/${suggestedPlace._id}`} className={classes.places} key={suggestedPlace._id}>
                             <div className={classes.imgWrapper}>
                                 <img src={img} alt="" />
                             </div>
                             <div className={classes.titleAndReview}>
-                                <span>{estate.title}</span>
+                                <span>{suggestedPlace.title}</span>
                                 <span className={classes.review}><AiFillStar className={classes.icon} /></span>
                             </div>
                             <div className={classes.countryAndPrice}>
-                                <span>Country: <span>{estate.country}</span></span>
-                                <span className={classes.price}>{estate.price}$ / <span>per person</span></span>
+                                <span>Country: <span>{suggestedPlace.country}</span></span>
+                                <span className={classes.price}>{suggestedPlace.price}$ / <span>per person</span></span>
                             </div>
                         </Link>
                     ))}
