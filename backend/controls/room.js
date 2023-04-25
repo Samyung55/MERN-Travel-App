@@ -51,7 +51,7 @@ roomRouter.get('/find/:id', async (req, res) => {
 })
 
 // Create Rooms
-roomRouter.post('/',  async (req, res) => {
+roomRouter.post('/', verifyTokenAdmin, async (req, res) => {
     try {
         const createdRoom = await Room.create(req.body)
         return res.status(201).json(createdRoom)
