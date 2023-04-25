@@ -20,6 +20,8 @@ const Login = () => {
       const email = event.target.email.value;
       const password = event.target.password.value;
     
+  
+    
       const response = await fetch('http://localhost:5500/auth/login', {
         method: 'POST',
         headers: {
