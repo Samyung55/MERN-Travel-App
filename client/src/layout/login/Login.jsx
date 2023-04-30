@@ -13,36 +13,33 @@ const Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-   
-    const handleLogin = async (event) => {
-      event.preventDefault();
-    
-      const email = event.target.email.value;
-      const password = event.target.password.value;
-    
-  
-    
-      const response = await fetch('http://localhost:5500/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-    
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(login(data));
-        navigate('/');
-      } else {
-        console.error(error);
-        setError(true);
-        setTimeout(() => {
-          setError(false);
-        }, 1500);
-      }
-    };
-    
+   const handleLogin = async (event) => {
+  event.preventDefault();
+
+  const email = event.target.email.value;
+  const password = event.target.password.value;
+
+  const response = await fetch('http://localhost:5500/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(login(data));
+    navigate('/');
+  } else {
+    console.error(error);
+    setError(true);
+    setTimeout(() => {
+      setError(false);
+    }, 1500);
+  }
+};
+
       
 
     return (
